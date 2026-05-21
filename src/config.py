@@ -1,0 +1,12 @@
+
+# SNAKE GAME v1.0
+# This file storage global constants
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+GRID_SIZE = 20
+FPS = 10
+
+BACKGROUND_COLOR = (30, 30, 30)
+SNAKE_COLOR = (0, 255, 0)
+FOOD_COLOR = (255, 0, 0)
