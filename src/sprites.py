@@ -16,6 +16,7 @@ class Snake:
         ]
 
         self.direction = (1, 0)
+        self.should_grow = False
 
     def move(self):
         head_x, head_y = self.positions[0]
@@ -27,7 +28,13 @@ class Snake:
         )
 
         self.positions.insert(0, new_head)
-        self.positions.pop()
+        if not self.should_grow:
+            self.positions.pop()
+        else:
+            self.should_grow = False
+
+    def grow(self):
+        self.should_grow = True
 
     def change_direction(self, new_direction):
         current_x, current_y = self.direction

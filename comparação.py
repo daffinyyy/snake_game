@@ -1,61 +1,67 @@
-
-# SNAKE GAME v1.0
-# This file manages the application loop, scenes, input handling, and screen drawing.
-
 import pygame
-from systems import World
+
 import config as c
+
+from systems import World
 
 
 class Game:
 
     def __init__(self):
+
         pygame.init()
-        self.screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
+
+        self.screen = pygame.display.set_mode(
+            (c.SCREEN_WIDTH, c.SCREEN_HEIGHT)
+        )
+
         self.clock = pygame.time.Clock()
+
         self.world = World()
 
     def handle_events(self):
+
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 return False
 
             if event.type == pygame.KEYDOWN:
-                up = (0, -1)
-                down = (0, 1)
-                left = (-1, 0)
-                right = (1, 0)
 
                 if event.key == pygame.K_UP:
-                    self.world.snake.change_direction(up)
+                    self.world.snake.change_direction((0, -1))
 
                 elif event.key == pygame.K_DOWN:
-                    self.world.snake.change_direction(down)
+                    self.world.snake.change_direction((0, 1))
 
                 elif event.key == pygame.K_LEFT:
-                    self.world.snake.change_direction(left)
+                    self.world.snake.change_direction((-1, 0))
 
                 elif event.key == pygame.K_RIGHT:
-                    self.world.snake.change_direction(right)
+                    self.world.snake.change_direction((1, 0))
 
         return True
 
-    def update(self):
-        self.world.update()
-
     def draw(self):
-        self.screen.fill((30, 30, 30))
+
+        self.screen.fill(c.BACKGROUND_COLOR)
+
         self.world.draw(self.screen)
+
         pygame.display.flip()
 
     def run(self):
+
         running = True
 
         while running:
+
             running = self.handle_events()
-            self.update()
+
+            self.world.update()
+
             self.draw()
-            self.clock.tick(10)
+
+            self.clock.tick(c.FPS)
 
         pygame.quit()
