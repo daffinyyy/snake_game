@@ -16,9 +16,11 @@ class Snake:
         ]
 
         self.direction = (1, 0)
+        self.next_direction = self.direction
         self.should_grow = False
 
     def move(self):
+        self.direction = self.next_direction
         head_x, head_y = self.positions[0]
         dir_x, dir_y = self.direction
 
@@ -44,7 +46,7 @@ class Snake:
         if (current_x + new_x, current_y + new_y) == (0, 0):
             return
 
-        self.direction = new_direction
+        self.next_direction = new_direction
 
     def draw(self, screen):
         for position in self.positions:
@@ -57,7 +59,7 @@ class Snake:
 
             pygame.draw.rect(
                 screen,
-                c.SNAKE_COLOR,
+                c.GREEN,
                 rect
             )
 
@@ -77,7 +79,7 @@ class Food:
     def draw(self, screen):
         pygame.draw.rect(
             screen,
-            c.FOOD_COLOR,
+            c.RED,
             self.rect
         )
 
