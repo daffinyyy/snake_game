@@ -23,7 +23,6 @@ class Game:
         self.clock = pygame.time.Clock()
         self.world = World()
 
-        # menu -> play -> game_over
         self.scene = "menu"
 
         self.start_time = 0
@@ -72,7 +71,6 @@ class Game:
 
 
                     # PLAYER 2 (WASD)
-                    # preparado para multiplayer
 
                     elif event.key == pygame.K_w:
                         self.world.snake.change_direction(up)
@@ -163,7 +161,7 @@ class Game:
         )
 
         controls = self.small_font.render(
-            "Player 1: ↑ ↓ ← →",
+            "Player 1: SETAS",
             True,
             c.WHITE
         )
