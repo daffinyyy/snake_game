@@ -191,7 +191,7 @@ class Game:
         pygame.draw.rect(
             self.screen,
             (50,50,50),
-            (0,0,c.SCREEN_WIDTH,40)
+            (0,0,c.SCREEN_WIDTH,c.HUD_HEIGHT)
         )
 
         score_text = self.small_font.render(
