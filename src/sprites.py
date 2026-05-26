@@ -10,9 +10,9 @@ class Snake:
 
     def __init__(self):
         self.positions = [
-            (100, 100),
-            (80, 100),
-            (60, 100)
+            (100, 140),
+            (80, 140),
+            (60, 140)
         ]
 
         self.direction = (1, 0)
