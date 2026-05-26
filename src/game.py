@@ -12,6 +12,9 @@ class Game:
     def __init__(self):
         pygame.init()
 
+        self.difficulty = "normal"
+        self.apply_difficulty()
+
         self.font = pygame.font.SysFont(None, 48)
         self.small_font = pygame.font.SysFont(None, 30)
         self.title_font = pygame.font.SysFont(None, 72)
@@ -28,6 +31,16 @@ class Game:
         self.start_time = 0
 
 
+    def apply_difficulty(self):
+        difficulty_food_count = {
+            "easy": 2,
+            "normal": 3,
+            "hard": 5,
+        }
+
+        c.FOOD_COUNT = difficulty_food_count[self.difficulty]
+
+
     def handle_events(self):
         for event in pygame.event.get():
 
@@ -40,6 +53,18 @@ class Game:
                 # MENU
                 # ======================
                 if self.scene == "menu":
+
+                    if event.key == pygame.K_1:
+                        self.difficulty = "easy"
+                        self.apply_difficulty()
+
+                    elif event.key == pygame.K_2:
+                        self.difficulty = "normal"
+                        self.apply_difficulty()
+
+                    elif event.key == pygame.K_3:
+                        self.difficulty = "hard"
+                        self.apply_difficulty()
 
                     if event.key == pygame.K_RETURN:
                         self.restart()
@@ -58,31 +83,31 @@ class Game:
                     # PLAYER 1 (setas)
 
                     if event.key == pygame.K_UP:
-                        self.world.snake.change_direction(up)
+                        self.world.snake_1.change_direction(up)
 
                     elif event.key == pygame.K_DOWN:
-                        self.world.snake.change_direction(down)
+                        self.world.snake_1.change_direction(down)
 
                     elif event.key == pygame.K_LEFT:
-                        self.world.snake.change_direction(left)
+                        self.world.snake_1.change_direction(left)
 
                     elif event.key == pygame.K_RIGHT:
-                        self.world.snake.change_direction(right)
+                        self.world.snake_1.change_direction(right)
 
 
                     # PLAYER 2 (WASD)
 
                     elif event.key == pygame.K_w:
-                        self.world.snake.change_direction(up)
+                        self.world.snake_2.change_direction(up)
 
                     elif event.key == pygame.K_s:
-                        self.world.snake.change_direction(down)
+                        self.world.snake_2.change_direction(down)
 
                     elif event.key == pygame.K_a:
-                        self.world.snake.change_direction(left)
+                        self.world.snake_2.change_direction(left)
 
                     elif event.key == pygame.K_d:
-                        self.world.snake.change_direction(right)
+                        self.world.snake_2.change_direction(right)
 
 
 
@@ -113,6 +138,7 @@ class Game:
 
     def restart(self):
 
+        self.apply_difficulty()
         self.world = World()
 
         self.scene = "play"
@@ -172,14 +198,28 @@ class Game:
             c.WHITE
         )
 
+        difficulty_text = self.small_font.render(
+            f"Dificuldade: {self.difficulty.title()}",
+            True,
+            c.WHITE
+        )
 
-        self.screen.blit(title, (220,120))
-        self.screen.blit(subtitle,(280,200))
+        difficulty_help = self.small_font.render(
+            "1 Fácil | 2 Normal | 3 Difícil",
+            True,
+            c.WHITE
+        )
 
-        self.screen.blit(play_text,(260,300))
+        self.screen.blit(title, title.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 - 120)))
+        self.screen.blit(subtitle, subtitle.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 - 40)))
 
-        self.screen.blit(controls,(280,420))
-        self.screen.blit(controls2,(290,460))
+        self.screen.blit(play_text, play_text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 40)))
+
+        self.screen.blit(difficulty_text, difficulty_text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 120)))
+        self.screen.blit(difficulty_help, difficulty_help.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 160)))
+
+        self.screen.blit(controls, controls.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 220)))
+        self.screen.blit(controls2, controls2.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 260)))
 
 
     # ===================================
@@ -195,7 +235,13 @@ class Game:
         )
 
         score_text = self.small_font.render(
-            f"Score: {self.world.score}",
+            f"Jogador 1: {self.world.score_1}",
+            True,
+            c.WHITE
+        )
+
+        score2_text = self.small_font.render(
+            f"Jogador 2: {self.world.score_2}",
             True,
             c.WHITE
         )
@@ -215,7 +261,8 @@ class Game:
 
 
         self.screen.blit(score_text,(10,8))
-        self.screen.blit(timer_text,(650,8))
+        self.screen.blit(score2_text,(210,8))
+        self.screen.blit(timer_text, timer_text.get_rect(topright=(c.SCREEN_WIDTH - 10, 8)))
 
 
     # ===================================
@@ -242,6 +289,19 @@ class Game:
             c.WHITE
         )
 
+        if self.world.winner == 1:
+            result_message = "Jogador 1 venceu"
+        elif self.world.winner == 2:
+            result_message = "Jogador 2 venceu"
+        else:
+            result_message = "Empate"
+
+        result_text = self.font.render(
+            result_message,
+            True,
+            c.WHITE
+        )
+
         restart_text = self.font.render(
             "Pressione R para reiniciar",
             True,
@@ -255,20 +315,13 @@ class Game:
         )
 
 
-        self.screen.blit(
-            game_over_text,
-            (295,240)
-        )
+        self.screen.blit(game_over_text, game_over_text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 - 40)))
 
-        self.screen.blit(
-            restart_text,
-            (190,280)
-        )
+        self.screen.blit(result_text, result_text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 10)))
 
-        self.screen.blit(
-            quit_text,
-            (290,320)
-        )
+        self.screen.blit(restart_text, restart_text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 60)))
+
+        self.screen.blit(quit_text, quit_text.get_rect(center=(c.SCREEN_WIDTH // 2, c.SCREEN_HEIGHT // 2 + 110)))
 
 
     def run(self):

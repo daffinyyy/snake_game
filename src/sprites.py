@@ -8,16 +8,20 @@ import config as c
 
 class Snake:
 
-    def __init__(self):
-        self.positions = [
-            (100, 140),
-            (80, 140),
-            (60, 140)
-        ]
+    def __init__(self, positions=None, direction=(1, 0), color=None):
+        if positions is None:
+            positions = [
+                (100, 140),
+                (80, 140),
+                (60, 140)
+            ]
 
-        self.direction = (1, 0)
+        self.positions = positions
+
+        self.direction = direction
         self.next_direction = self.direction
         self.should_grow = False
+        self.color = color or c.GREEN
 
     def move(self):
         self.direction = self.next_direction
@@ -59,7 +63,7 @@ class Snake:
 
             pygame.draw.rect(
                 screen,
-                c.GREEN,
+                self.color,
                 rect
             )
 
