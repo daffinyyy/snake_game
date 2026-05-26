@@ -17,22 +17,28 @@ class World:
         self.game_over = False
 
     def spawn_food(self):
-        while True:
-            x = random.randrange(
-                c.GRID_SIZE * 2,
-                c.SCREEN_WIDTH,
-                c.GRID_SIZE
+    while True:
+
+        x = random.randrange(
+            0,
+            c.SCREEN_WIDTH,
+            c.GRID_SIZE
+        )
+
+        y = random.randrange(
+            c.HUD_HEIGHT,
+            c.SCREEN_HEIGHT,
+            c.GRID_SIZE
+        )
+
+        if (x, y) not in self.snake.positions:
+
+            self.food.update_position(
+                x,
+                y
             )
 
-            y = random.randrange(
-                0,
-                c.SCREEN_HEIGHT,
-                c.GRID_SIZE
-            )
-
-            if (x, y) not in self.snake.positions:
-                self.food.update_position(x, y)
-                break
+            return
 
     def check_food_collision(self):
         snake_head = self.snake.positions[0]
