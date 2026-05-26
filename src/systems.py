@@ -19,7 +19,7 @@ class World:
     def spawn_food(self):
         while True:
             x = random.randrange(
-                0,
+                c.GRID_SIZE * 2,
                 c.SCREEN_WIDTH,
                 c.GRID_SIZE
             )
